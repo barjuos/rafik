@@ -1,0 +1,19 @@
+# Gradle / Android Studio
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing material must never be committed
+keystore/
+keystore.properties
+*.jks
+*.keystore
+
+# Generated APK/AAB output
+app/release/
+dist/

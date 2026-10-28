@@ -1,0 +1,16 @@
+# GitHub Pages Configuration
+# This file is used for static site configuration
+
+base: /
+
+# Enable GitHub Pages directly on repository
+# Go to: Settings > Pages in your GitHub repo
+
+source:
+  branch: main
+  folder: docs/
+
+# For Next.js app routing, consider using:
+# source:
+#   branch: main  
+#   folder: ./out
