@@ -1,0 +1,11 @@
+# Keystore and signing files - NEVER commit!
+# These contain your PRIVATE KEY and passwords
+
+android/rafik-release.keystore
+rafik-release.keystore
+android/*.keystore
+android/*.jks
+android/*.p12
+*.keystore
+*.jks
+*.p12

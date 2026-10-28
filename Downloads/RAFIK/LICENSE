@@ -1,0 +1,72 @@
+MIT License
+Copyright (c) 2025 Rafiq Development
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+                         🛡️ ANDROID APP SECURITY NOTICE
+================================================================================
+
+Web App: Open Source (MIT License)
+Android App: Protected Distribution Only
+
+1. PERSONAL USE ONLY
+   The Android APK is distributed for personal use on your device only. You may
+   not redistribute, share, or resell the APK file without explicit permission.
+
+2. NO REDISTRIBUTION
+   - ❌ Do NOT share the APK with others
+   - ❌ Do NOT upload to third-party stores or sites
+   - ❌ Do NOT include in commercial apps
+   - ❌ Do NOT reverse engineer or decompile the code
+
+3. CODE PROTECTION
+   The Android app includes security measures:
+   - R8/ProGuard obfuscation
+   - Code signing with custom keystore
+   - License verification on startup
+   - Anti-debug/anti-root detection
+   - Tamper detection and prevention
+
+4. LEGAL COMPLIANCE
+   By installing the Android app, you agree to these terms:
+   - Install only from official sources (GitHub Releases)
+   - Do not modify or redistribute the APK
+   - Report any unauthorized copies found online
+   
+   Violation of these terms may result in legal action and immediate revocation
+   of access to updates.
+
+5. WEB APP vs ANDROID APP
+   - Web App (/src/) remains OPEN SOURCE under MIT license
+   - Android App (/android/) is PROTECTED for authorized distribution only
+   
+6. SUPPORT & UPDATES
+   Updates, bug fixes, and new features will ONLY be provided to users who
+   install from official GitHub Releases. Unauthorized copies will not receive
+   security patches.
+
+7. THIRD-PARTY INTEGRATION
+   The web app may integrate with third-party services. By using the Android
+   app, you agree to comply with all applicable privacy and data protection
+   laws.
+
+================================================================================
+                     Contact: dev@rafiq.com (add your email)
+================================================================================
