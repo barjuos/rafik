@@ -9,6 +9,13 @@
 2. قم بتفعيل خيار "التثبيت من مصادر غير معروفة" (Install from Unknown Sources) في إعدادات الأمان بجهازك.
 3. افتح ملف الـ APK واتبع التعليمات لإتمام عملية التثبيت.
 
+**🆕 ما الجديد في الإصدار 1.1.0:**
+- 📖 **قارئ سورة البقرة (286 آية) وسورة الكهف (110 آية)** داخل التطبيق، بصفحة قراءة مريحة قابلة للتمرير.
+- 🔖 **علامة قراءة ذكية**: اضغط على أي آية فتُلوَّن بالأصفر، ثم اضغط زر العلامة (🔖) للعودة إليها في أي وقت.
+- 🕮 عند إعادة فتح السورة ينتقل التطبيق تلقائياً إلى آخر آية علّمتها، والضغط على الآية المعلّمة مرة أخرى يزيل العلامة.
+- 🕌 بطاقتان جديدتان للسورتين في الشاشة الرئيسية، مع ترقيم آيات سورة البقرة.
+- ✨ توسيط نصوص الأذكار في شاشة القراءة.
+
 <div align="center">
   <img src="public/icon-512x512.png" alt="Rafiq Logo" width="180"/>
   
@@ -28,8 +35,10 @@ Rafiq is a dual-platform application designed to help Muslims perform their dail
 
 ### ✨ Key Features
 
-- ✅ **13 Complete Categories** - Morning, Evening, Before Sleep, and more
-- ✅ **115 Authentic Adhkar** - Sourced from Sahih Bukhari, Muslim, Tirmidhi, and Abu Dawud
+- ✅ **15 Complete Categories** - Morning, Evening, Before Sleep, Surahs, and more
+- ✅ **117 Authentic Adhkar & Surahs** - Sourced from Sahih Bukhari, Muslim, Tirmidhi, and Abu Dawud
+- ✅ **Qur'an Reader** - Full Surah Al-Baqarah (286 verses) & Al-Kahf (110 verses)
+- ✅ **Smart Reading Bookmark** - Tap a verse to highlight it, press 🔖 to jump back to it
 - ✅ **Daily Tracker** - Intuitive touch-based counting system
 - ✅ **Custom Adhkar** - Add your personal reminders
 - ✅ **Theme Support** - Light, Dark, and System themes
@@ -89,9 +98,18 @@ A beautiful native Android application built with Jetpack Compose.
 
 ### Download
 
-🔥 **Download Latest APK:** [Rafiq v1.0.0 (3.1 MB)](https://github.com/barjuos/rafik/releases/latest)
+🔥 **Download Latest APK:** [Rafiq v1.1.0](https://github.com/barjuos/rafik/releases/latest)
 
 Or visit our **[GitHub Releases](https://github.com/barjuos/rafik/releases)** for all versions.
+
+### 📖 Reading the Surahs
+
+1. من الشاشة الرئيسية اضغط على بطاقة **سورة البقرة** أو **سورة الكهف**.
+2. السورة تُفتح كصفحة قراءة كاملة قابلة للتمرير (مع ترقيم الآيات).
+3. **اضغط على أي آية** لتضع عليها علامة صفراء — تُحفظ تلقائياً.
+4. **اضغط زر 🔖** في الأعلى للعودة إلى الآية المعلّمة.
+5. في المرة القادمة، تُفتح السورة تلقائياً على آخر آية علّمتها.
+6. للضغط على الآية المعلّمة مرة أخرى → تُزال العلامة.
 
 ### Installation
 
@@ -118,6 +136,8 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ### Features
 - 🏃 **Fast & Native** - No WebView, pure Kotlin + Jetpack Compose
+- 📖 **Surah Reader** - Al-Baqarah & Al-Kahf with verse numbering and smooth scrolling
+- 🔖 **Verse Bookmark** - Tap a verse to highlight it in yellow, 🔖 jumps back to it
 - 📊 **Room Database** - Persistent offline storage
 - 🔔 **Haptic Feedback** - Tactile response on each tap
 - 🔊 **Custom Sounds** - Adjustable audio feedback
@@ -140,7 +160,8 @@ RAFIQ/
 │   │   ├── data/                  # Room Database & Models
 │   │   ├── ui/                    # Jetpack Compose Screens
 │   │   │   ├── home/             # Home Screen
-│   │   │   ├── tracker/          # Tracker Screen (13 categories)
+│   │   │   ├── tracker/          # Tracker Screen (15 categories)
+│   │   │   ├── reader/           # Surah Reader + verse bookmarks
 │   │   │   ├── adhkar/           # My Adhkar Screen
 │   │   │   └── components/       # Reusable Components
 │   │   ├── navigation/            # Navigation Graph
@@ -150,8 +171,9 @@ RAFIQ/
 ├── 🌐 src/                        # Web App (Next.js 15)
 │   ├── app/                       # Pages & Layouts
 │   ├── components/                # React Components
-│   ├── data/                      # Adhkar Content (115 adhkar)
+│   ├── data/                      # Adhkar Content (115 adhkar + 2 surahs)
 │   │   ├── adhkar.ts              # Complete adhkar database
+│   │   ├── surahs.ts              # Al-Baqarah & Al-Kahf full text
 │   │   ├── android_app_data.json  # Android app sync data
 │   │   └── rizq.ts                # Rizq category data
 │   └── styles/                    # Tailwind Config
@@ -190,7 +212,8 @@ NEXT_PUBLIC_VERSION="1.0.0"
 
 ## 📦 Content
 
-All 115 adhkar are carefully sourced from authentic Islamic references:
+All 115 adhkar are carefully sourced from authentic Islamic references, plus the complete text of
+**Surah Al-Baqarah** (286 verses) and **Surah Al-Kahf** (110 verses) in Uthmani script:
 
 | Source | Categories | Count |
 |--------|-----------|-------|
