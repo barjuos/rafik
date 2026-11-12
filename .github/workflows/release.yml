@@ -1,0 +1,100 @@
+name: Build and Release Android APK
+
+on:
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (optional, defaults to auto-increment)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      
+      - name: Build APK with security features
+        run: |
+          cd android
+          ./gradlew assembleRelease
+      
+      - name: Upload APK to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: android/app/build/outputs/apk/release/app-release.apk
+          asset_name: Rafiq-v${{ github.event.release.tag_name || github.run_number }}.apk
+          tag: ${{ github.event.release.tag_name || format('v{0}', github.run_number) }}
+          overwrite: true
+          draft: false
+          prerelease: ${{ startsWith(github.event.release.tag_name, 'alpha') || startsWith(github.event.release.tag_name, 'beta') || startsWith(github.event.release.tag_name, 'rc') }}
+      
+      - name: Create Release Notes
+        id: create_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read changelog if exists, otherwise use default notes
+            const changelogPath = 'CHANGELOG.md';
+            let body;
+            
+            try {
+              body = fs.readFileSync(changelogPath, 'utf8');
+            } catch (e) {
+              body = `# Rafiq ${process.env.GITHUB_REF || 'Release'}\n\n- **Android App** - Native Jetpack Compose app with enhanced security\n- **Features**: 13 categories, 115 authentic adhkar, daily tracker, custom adhkar\n- **Security**: Code obfuscation, ProGuard protection, disabled backups`;
+            }
+            
+            const { data: releases } = await github.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            
+            const latestRelease = releases[0];
+            
+            if (latestRelease) {
+              await github.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: latestRelease.id,
+                tag_name: latestRelease.tag_name,
+                name: `Rafiq v${latestRelease.name}`,
+                body: body,
+                draft: false,
+                prerelease: false
+              });
+              
+              return { version: latestRelease.tag_name };
+            } else {
+              const tagName = process.env.GITHUB_REF?.replace('refs/tags/', '') || 'v1.0.0';
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tagName,
+                name: `Rafiq v${tagName}`,
+                body: body,
+                draft: false,
+                prerelease: false
+              });
+              
+              return { version: tagName };
+            }

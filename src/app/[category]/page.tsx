@@ -9,6 +9,7 @@ import { mosqueAdhkar } from '@/data/mosque';
 import { travelAdhkar } from '@/data/travel';
 import { clothingAdhkar } from '@/data/clothing';
 import { toiletAdhkar } from '@/data/toilet';
+import { surahBaqarahAdhkar, surahKahfAdhkar } from '@/data/surahs';
 import type { Dhikr } from '@/data/types';
 import AdhkarTracker from '@/components/AdhkarTracker';
 
@@ -44,6 +45,10 @@ function getAdhkarData(category: string): { title: string; adhkar: Dhikr[] } {
         return { title: 'أذكار لبس الثوب', adhkar: clothingAdhkar };
     case 'toilet':
         return { title: 'أذكار الخلاء', adhkar: toiletAdhkar };
+    case 'surah-baqarah':
+        return { title: 'سورة البقرة', adhkar: surahBaqarahAdhkar };
+    case 'surah-kahf':
+        return { title: 'سورة الكهف', adhkar: surahKahfAdhkar };
     default:
       notFound();
   }
@@ -63,7 +68,9 @@ export async function generateStaticParams() {
     'mosque',
     'travel',
     'clothing',
-    'toilet'
+    'toilet',
+    'surah-baqarah',
+    'surah-kahf'
   ].map(category => ({
     category,
   }));

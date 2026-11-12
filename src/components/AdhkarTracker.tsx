@@ -144,14 +144,14 @@ export default function AdhkarTracker({ title, adhkar }: AdhkarTrackerProps) {
                     </div>
                 </CardHeader>
               <CardContent className="px-6 pb-4">
-                <p className="text-3xl md:text-4xl font-semibold text-foreground/90" style={{ lineHeight: '3rem' }}>
+                <p className="text-3xl md:text-4xl font-semibold text-foreground/90 text-center" style={{ lineHeight: '3rem' }}>
                   {currentDhikr.content}
                 </p>
               </CardContent>
               {(currentDhikr.description || currentDhikr.reference) && (
                 <CardFooter className="flex flex-col gap-2 text-sm text-muted-foreground px-6 pb-6 bg-secondary/80 pt-4">
                     {currentDhikr.description && <p className="text-center">{currentDhikr.description}</p>}
-                    {currentDhikr.reference && <p className="font-bold">{currentDhikr.reference}</p>}
+                    {currentDhikr.reference && <p className="font-bold text-center">{currentDhikr.reference}</p>}
                 </CardFooter>
               )}
             </Card>

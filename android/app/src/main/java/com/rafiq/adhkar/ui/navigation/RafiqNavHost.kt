@@ -3,6 +3,7 @@ package com.rafiq.adhkar.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +12,7 @@ import com.rafiq.adhkar.data.model.RafiqCategories
 import com.rafiq.adhkar.ui.MainViewModel
 import com.rafiq.adhkar.ui.adhkar.MyAdhkarScreen
 import com.rafiq.adhkar.ui.home.HomeScreen
+import com.rafiq.adhkar.ui.reader.SurahReaderScreen
 import com.rafiq.adhkar.ui.tracker.TrackerScreen
 
 @Composable
@@ -34,10 +36,10 @@ fun RafiqNavHost(
                 theme = theme,
                 onThemeChange = viewModel::setTheme,
                 onCategoryClick = { category ->
-                    if (category.id == "my-adhkar") {
-                        navController.navigate("my-adhkar")
-                    } else {
-                        navController.navigate("category/${category.id}")
+                    when {
+                        category.id == "my-adhkar" -> navController.navigate("my-adhkar")
+                        category.id.startsWith("surah-") -> navController.navigate("reader/${category.id}")
+                        else -> navController.navigate("category/${category.id}")
                     }
                 },
             )
@@ -51,7 +53,24 @@ fun RafiqNavHost(
                 adhkar = adhkar[categoryId].orEmpty(),
                 theme = theme,
                 onThemeChange = viewModel::setTheme,
-                initialIndex = previewIndex,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable("reader/{category}") { backStackEntry ->
+            val categoryId = backStackEntry.arguments?.getString("category") ?: return@composable
+            val category = RafiqCategories.firstOrNull { it.id == categoryId }
+            val surahContent = adhkar[categoryId]?.firstOrNull()?.content ?: ""
+            val bookmark by remember(categoryId) {
+                viewModel.getBookmark(categoryId)
+            }.collectAsState(initial = null)
+            SurahReaderScreen(
+                title = category?.detailTitle ?: "",
+                content = surahContent,
+                theme = theme,
+                initialBookmark = bookmark,
+                onThemeChange = viewModel::setTheme,
+                onSaveBookmark = { viewModel.saveBookmark(categoryId, it) },
                 onBack = { navController.popBackStack() },
             )
         }

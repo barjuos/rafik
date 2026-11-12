@@ -2,6 +2,7 @@ package com.rafiq.adhkar.data.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.PlaylistAdd
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.Checkroom
@@ -43,5 +44,7 @@ val RafiqCategories: List<Category> = listOf(
     Category("relief", "أدعية الهم والحزن", Icons.Outlined.SentimentSatisfied),
     Category("rizq", "أدعية الرزق", Icons.Outlined.Spa),
     Category("advice", "وصايا نبوية", Icons.Outlined.Star),
+    Category("surah-baqarah", "سورة البقرة", Icons.AutoMirrored.Outlined.MenuBook),
+    Category("surah-kahf", "سورة الكهف", Icons.AutoMirrored.Outlined.MenuBook),
     Category("my-adhkar", "أذكاري", Icons.AutoMirrored.Outlined.PlaylistAdd),
 )

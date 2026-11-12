@@ -50,6 +50,12 @@ class MainViewModel(
         viewModelScope.launch { settingsStore.setTheme(value) }
     }
 
+    fun getBookmark(surahId: String) = settingsStore.getBookmark(surahId)
+
+    fun saveBookmark(surahId: String, verseIndex: Int) {
+        viewModelScope.launch { settingsStore.saveBookmark(surahId, verseIndex) }
+    }
+
     fun addCustom(content: String, count: Int, description: String, reference: String) {
         viewModelScope.launch {
             customDao.insert(

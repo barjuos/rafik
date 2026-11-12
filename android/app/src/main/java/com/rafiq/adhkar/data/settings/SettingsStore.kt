@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,16 @@ class SettingsStore(private val context: Context) {
     suspend fun setTheme(value: String) {
         context.rafiqDataStore.edit { preferences ->
             preferences[themeKey] = value
+        }
+    }
+
+    fun getBookmark(surahId: String): Flow<Int> = context.rafiqDataStore.data.map { preferences ->
+        preferences[intPreferencesKey("bookmark_$surahId")] ?: -1
+    }
+
+    suspend fun saveBookmark(surahId: String, verseIndex: Int) {
+        context.rafiqDataStore.edit { preferences ->
+            preferences[intPreferencesKey("bookmark_$surahId")] = verseIndex
         }
     }
 }

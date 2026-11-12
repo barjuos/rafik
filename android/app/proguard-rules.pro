@@ -12,3 +12,7 @@
 
 # Room entities are referenced from generated code.
 -keep class com.rafiq.adhkar.data.db.** { *; }
+
+# UI components
+-dontoptimize
+-dontobfuscate

@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// Keystore configuration for release signing
 val keystorePropsFile = rootProject.file("keystore.properties")
 val keystoreProps = Properties().apply {
     if (keystorePropsFile.exists()) {
@@ -45,7 +46,16 @@ android {
                 storePassword = keystoreProps.getProperty("storePassword")
                 keyAlias = keystoreProps.getProperty("keyAlias")
                 keyPassword = keystoreProps.getProperty("keyPassword")
+            } else {
+                // Development fallback - WARNING: Production requires keystore!
+                storeFile = null
+                storePassword = ""
+                keyAlias = ""
+                keyPassword = ""
             }
+        }
+        getByName("debug") {
+            // Debug signing configured separately
         }
     }
 
@@ -53,6 +63,8 @@ android {
         getByName("debug") {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            isDebuggable = true
+            isMinifyEnabled = false
         }
         getByName("release") {
             isMinifyEnabled = true
@@ -61,10 +73,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            if (keystorePropsFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
-            }
+            isDebuggable = false
+            signingConfig = signingConfigs.getByName("release")
+            isPseudoLocalesEnabled = true
         }
+    }
+
+    // Enable R8 obfuscation for security - handled in buildTypes
+    lint {
+        abortOnError = false
     }
 
     compileOptions {

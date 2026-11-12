@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sunrise, Sunset, Moon, HandPlatter, ListPlus, Smile, Sprout, Star, Home as HomeIcon, Utensils, Landmark, Car, Shirt, Bath } from 'lucide-react';
+import { Sunrise, Sunset, Moon, HandPlatter, ListPlus, Smile, Sprout, Star, Home as HomeIcon, Utensils, Landmark, Car, Shirt, Bath, BookOpen } from 'lucide-react';
 import { Header } from '@/components/Header';
 
 const categories = [
@@ -17,6 +17,8 @@ const categories = [
   { name: 'أدعية الهم والحزن', href: '/relief', icon: <Smile className="h-10 w-10" /> },
   { name: 'أدعية الرزق', href: '/rizq', icon: <Sprout className="h-10 w-10" /> },
   { name: 'وصايا نبوية', href: '/advice', icon: <Star className="h-10 w-10" /> },
+  { name: 'سورة البقرة', href: '/surah-baqarah', icon: <BookOpen className="h-10 w-10" /> },
+  { name: 'سورة الكهف', href: '/surah-kahf', icon: <BookOpen className="h-10 w-10" /> },
   { name: 'أذكاري', href: '/my-adhkar', icon: <ListPlus className="h-10 w-10" /> },
 ];
 

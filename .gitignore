@@ -43,3 +43,9 @@ logs/
 *.orig
 .cache/
 .temp/
+
+# Secrets / signing
+keystore.properties
+*.jks
+*.keystore
+android/keystore.properties
