@@ -15,7 +15,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.FormatSize
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +47,13 @@ import com.rafiq.adhkar.ui.components.ThemeMenu
 import kotlinx.coroutines.launch
 
 private val BookmarkHighlight = Color(0xFFFFD54F).copy(alpha = 0.45f)
+
+/** Default/limits for the reader text size, in sp. */
+const val DefaultReaderFontSize = 28
+const val MinReaderFontSize = 18
+const val MaxReaderFontSize = 46
+
+private val ReaderFontSizes = listOf(20, 24, 28, 32, 36, 40, 46)
 
 private val VerseMarker = Regex("\\((?:\\d|[\\u0660-\\u0669])+\\)")
 
@@ -75,14 +87,14 @@ fun SurahReaderScreen(
     theme: String,
     /** Saved verse index, or null while the saved value is still loading. */
     initialBookmark: Int?,
+    fontSize: Int,
     onThemeChange: (String) -> Unit,
     onSaveBookmark: (Int) -> Unit,
+    onFontSizeChange: (Int) -> Unit,
     onBack: () -> Unit,
 ) {
     val verses = remember(content) { splitVerses(content) }
-    LaunchedEffect(verses.size) {
-        android.util.Log.d("SurahReader", "$title -> ${verses.size} verses, bookmark=$initialBookmark")
-    }
+    var fontMenuOpen by remember { mutableStateOf(false) }
     var selectedBookmark by remember { mutableIntStateOf(initialBookmark ?: -1) }
     var appliedInitialBookmark by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
@@ -121,6 +133,49 @@ fun SurahReaderScreen(
                     }
                 },
                 actions = {
+                    Box {
+                        IconButton(onClick = { fontMenuOpen = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.FormatSize,
+                                contentDescription = "حجم الخط",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = fontMenuOpen,
+                            onDismissRequest = { fontMenuOpen = false },
+                        ) {
+                            ReaderFontSizes.forEach { size ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = "أ",
+                                            fontSize = size.sp,
+                                            fontWeight = if (size == fontSize) FontWeight.Bold else FontWeight.Normal,
+                                            color = if (size == fontSize) {
+                                                MaterialTheme.colorScheme.primary
+                                            } else {
+                                                MaterialTheme.colorScheme.onSurface
+                                            },
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        if (size == fontSize) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                            )
+                                        }
+                                    },
+                                    onClick = {
+                                        onFontSizeChange(size)
+                                        fontMenuOpen = false
+                                    },
+                                )
+                            }
+                        }
+                    }
                     IconButton(onClick = {
                         if (selectedBookmark in verses.indices) {
                             scope.launch {
@@ -183,8 +238,9 @@ fun SurahReaderScreen(
                     Text(
                         text = verse,
                         style = MaterialTheme.typography.bodyLarge.copy(
-                            fontSize = 24.sp,
-                            lineHeight = 44.sp,
+                            fontSize = fontSize.sp,
+                            lineHeight = (fontSize * 1.9f).sp,
+                            letterSpacing = 0.sp,
                         ),
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Justify,

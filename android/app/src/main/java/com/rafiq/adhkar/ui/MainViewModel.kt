@@ -39,6 +39,9 @@ class MainViewModel(
     val customAdhkar: StateFlow<List<CustomDhikr>> = customDao.observeAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    val readerFontSize: StateFlow<Int> = settingsStore.readerFontSize
+        .stateIn(viewModelScope, SharingStarted.Eagerly, com.rafiq.adhkar.ui.reader.DefaultReaderFontSize)
+
     init {
         viewModelScope.launch {
             _adhkar.value = runCatching { repository.load() }.getOrDefault(emptyMap())
@@ -54,6 +57,10 @@ class MainViewModel(
 
     fun saveBookmark(surahId: String, verseIndex: Int) {
         viewModelScope.launch { settingsStore.saveBookmark(surahId, verseIndex) }
+    }
+
+    fun setReaderFontSize(value: Int) {
+        viewModelScope.launch { settingsStore.setReaderFontSize(value) }
     }
 
     fun addCustom(content: String, count: Int, description: String, reference: String) {

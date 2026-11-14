@@ -34,4 +34,16 @@ class SettingsStore(private val context: Context) {
             preferences[intPreferencesKey("bookmark_$surahId")] = verseIndex
         }
     }
+
+    private val readerFontSizeKey = intPreferencesKey("reader_font_size")
+
+    val readerFontSize: Flow<Int> = context.rafiqDataStore.data.map { preferences ->
+        preferences[readerFontSizeKey] ?: com.rafiq.adhkar.ui.reader.DefaultReaderFontSize
+    }
+
+    suspend fun setReaderFontSize(value: Int) {
+        context.rafiqDataStore.edit { preferences ->
+            preferences[readerFontSizeKey] = value
+        }
+    }
 }

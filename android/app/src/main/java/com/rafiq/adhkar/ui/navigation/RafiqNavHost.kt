@@ -23,6 +23,7 @@ fun RafiqNavHost(
     val adhkar by viewModel.adhkar.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val theme by viewModel.theme.collectAsState()
+    val fontSize by viewModel.readerFontSize.collectAsState()
     val custom by viewModel.customAdhkar.collectAsState()
 
     NavHost(
@@ -69,8 +70,10 @@ fun RafiqNavHost(
                 content = surahContent,
                 theme = theme,
                 initialBookmark = bookmark,
+                fontSize = fontSize,
                 onThemeChange = viewModel::setTheme,
                 onSaveBookmark = { viewModel.saveBookmark(categoryId, it) },
+                onFontSizeChange = viewModel::setReaderFontSize,
                 onBack = { navController.popBackStack() },
             )
         }

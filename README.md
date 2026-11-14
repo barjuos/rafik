@@ -9,7 +9,9 @@
 2. قم بتفعيل خيار "التثبيت من مصادر غير معروفة" (Install from Unknown Sources) في إعدادات الأمان بجهازك.
 3. افتح ملف الـ APK واتبع التعليمات لإتمام عملية التثبيت.
 
-**🆕 ما الجديد في الإصدار 1.1.0:**
+**🆕 ما الجديد في الإصدار 1.1.1:**
+- ✍️ **إصلاح رسم الحروف**: كلمات مثل «إبراهيم» و«النبيين» كانت تظهر بحرف ياء ناقص بسبب علامات الرسم العثماني الخاصة؛ تم استبدال النص بنص قرآني قياسي كامل التشكيل.
+- 🔠 **التحكم بحجم الخط**: زر جديد في أعلى شاشة القراءة (أ diagonally) لاختيار حجم الخط من 7 مستويات، ويُحفظ اختيارك تلقائياً.
 - 📖 **قارئ سورة البقرة (286 آية) وسورة الكهف (110 آية)** داخل التطبيق، بصفحة قراءة مريحة قابلة للتمرير.
 - 🔖 **علامة قراءة ذكية**: اضغط على أي آية فتُلوَّن بالأصفر، ثم اضغط زر العلامة (🔖) للعودة إليها في أي وقت.
 - 🕮 عند إعادة فتح السورة ينتقل التطبيق تلقائياً إلى آخر آية علّمتها، والضغط على الآية المعلّمة مرة أخرى يزيل العلامة.
@@ -98,7 +100,7 @@ A beautiful native Android application built with Jetpack Compose.
 
 ### Download
 
-🔥 **Download Latest APK:** [Rafiq v1.1.0](https://github.com/barjuos/rafik/releases/latest)
+🔥 **Download Latest APK:** [Rafiq v1.1.1](https://github.com/barjuos/rafik/releases/latest)
 
 Or visit our **[GitHub Releases](https://github.com/barjuos/rafik/releases)** for all versions.
 
@@ -110,6 +112,12 @@ Or visit our **[GitHub Releases](https://github.com/barjuos/rafik/releases)** fo
 4. **اضغط زر 🔖** في الأعلى للعودة إلى الآية المعلّمة.
 5. في المرة القادمة، تُفتح السورة تلقائياً على آخر آية علّمتها.
 6. للضغط على الآية المعلّمة مرة أخرى → تُزال العلامة.
+
+### 🔠 Adjusting the text size
+
+- اضغط على أيقونة **حجم الخط** (أ diagonally) في أعلى شاشة القراءة.
+- اختر من بين 7 أحجام (من 20 إلى 46).
+- يظهر الحجم الحالي بعلامة ✓، ويُحفظ اختيارك تلقائياً لكل السور.
 
 ### Installation
 
@@ -138,6 +146,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 - 🏃 **Fast & Native** - No WebView, pure Kotlin + Jetpack Compose
 - 📖 **Surah Reader** - Al-Baqarah & Al-Kahf with verse numbering and smooth scrolling
 - 🔖 **Verse Bookmark** - Tap a verse to highlight it in yellow, 🔖 jumps back to it
+- 🔠 **Adjustable Text Size** - 7 reading sizes from 20 to 46 sp, remembered per device
 - 📊 **Room Database** - Persistent offline storage
 - 🔔 **Haptic Feedback** - Tactile response on each tap
 - 🔊 **Custom Sounds** - Adjustable audio feedback
