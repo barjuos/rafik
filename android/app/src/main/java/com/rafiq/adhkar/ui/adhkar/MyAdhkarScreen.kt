@@ -1,6 +1,7 @@
 package com.rafiq.adhkar.ui.adhkar
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,12 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -46,12 +51,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rafiq.adhkar.data.db.CustomDhikr
 import com.rafiq.adhkar.data.model.Dhikr
+import com.rafiq.adhkar.data.settings.TrackerProgress
 import com.rafiq.adhkar.ui.components.ThemeMenu
 import com.rafiq.adhkar.ui.tracker.TrackerScreen
 import kotlinx.coroutines.launch
@@ -69,6 +76,10 @@ private fun CustomDhikr.toDhikr(): Dhikr = Dhikr(
 @Composable
 fun MyAdhkarScreen(
     custom: List<CustomDhikr>,
+    /** Saved reading progress (shared with the adhkar tracker). */
+    savedProgress: TrackerProgress? = null,
+    onSaveProgress: (Int, Int) -> Unit = { _, _ -> },
+    onResetProgress: () -> Unit = {},
     theme: String,
     onThemeChange: (String) -> Unit,
     onAdd: (String, Int, String, String) -> Unit,
@@ -76,27 +87,55 @@ fun MyAdhkarScreen(
     onBack: () -> Unit,
 ) {
     var tracking by rememberSaveable { mutableStateOf(false) }
+    var selectionMode by rememberSaveable { mutableStateOf(false) }
+    var selectedIds by remember { mutableStateOf(emptySet<Long>()) }
+    var initializedSelection by remember { mutableStateOf(false) }
     var showAddDialog by rememberSaveable { mutableStateOf(false) }
     val dhikrList = remember(custom) { custom.map { it.toDhikr() } }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    // Default: everything selected the first time the list is shown.
+    LaunchedEffect(custom.map { it.id }) {
+        if (!initializedSelection) {
+            initializedSelection = true
+            selectedIds = custom.map { it.id }.toSet()
+        } else {
+            val available = custom.map { it.id }.toSet()
+            selectedIds = selectedIds.intersect(available)
+        }
+    }
+
     LaunchedEffect(custom.isEmpty()) {
         if (custom.isEmpty()) tracking = false
     }
 
+    BackHandler(enabled = selectionMode) {
+        selectionMode = false
+    }
+
     BackHandler(enabled = tracking) { tracking = false }
 
-    if (tracking && dhikrList.isNotEmpty()) {
-        TrackerScreen(
-            title = "أذكاري",
-            adhkar = dhikrList,
-            theme = theme,
-            onThemeChange = onThemeChange,
-            onBack = { tracking = false },
-        )
-        return
+    if (tracking) {
+        val selectedList = dhikrList.filter { item ->
+            custom.firstOrNull { it.id.toInt() == item.id }?.id in selectedIds
+        }
+        if (selectedList.isNotEmpty()) {
+            TrackerScreen(
+                title = "أذكاري",
+                adhkar = selectedList,
+                theme = theme,
+                onThemeChange = onThemeChange,
+                onBack = { tracking = false },
+                savedProgress = savedProgress,
+                onSaveProgress = onSaveProgress,
+                onResetProgress = onResetProgress,
+            )
+            return
+        }
     }
+
+    val selectedCount = selectedIds.size
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -106,8 +145,10 @@ fun MyAdhkarScreen(
                 title = {
                     Text(
                         text = "أذكاري",
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
                     )
                 },
                 navigationIcon = {
@@ -158,33 +199,94 @@ fun MyAdhkarScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Button(onClick = { tracking = true }) {
+                    Button(onClick = {
+                        if (selectedCount == 0) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar("اختر ذكرًا واحدًا على الأقل للقراءة")
+                            }
+                        } else {
+                            tracking = true
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.PlayArrow,
                             contentDescription = null,
                             modifier = Modifier.size(20.dp),
                         )
                         Spacer(Modifier.width(6.dp))
-                        Text("بدء القراءة")
+                        Text("بدء القراءة ($selectedCount)")
                     }
-                    OutlinedButton(onClick = { showAddDialog = true }) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
+                    Row {
+                        OutlinedButton(onClick = { selectionMode = !selectionMode }) {
+                            Icon(
+                                imageVector = Icons.Filled.Checklist,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text(if (selectionMode) "إلغاء الاختيار" else "اختيار")
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        OutlinedButton(onClick = { showAddDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text("إضافة ذكر")
+                        }
+                    }
+                }
+
+                if (selectionMode) {
+                    Spacer(Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "اختر الأذكار التي تريدها ${selectedCount} من ${custom.size}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
                         )
-                        Spacer(Modifier.width(6.dp))
-                        Text("إضافة ذكر")
+                        TextButton(onClick = {
+                            selectedIds = if (selectedIds.size == custom.size) {
+                                emptySet()
+                            } else {
+                                custom.map { it.id }.toSet()
+                            }
+                        }) {
+                            Text(if (selectedIds.size == custom.size) "مسح الكل" else "تحديد الكل")
+                        }
                     }
                 }
 
                 Spacer(Modifier.height(16.dp))
 
                 custom.forEach { item ->
+                    val isSelected = item.id in selectedIds
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable(enabled = selectionMode) {
+                                selectedIds = if (isSelected) {
+                                    selectedIds - item.id
+                                } else {
+                                    selectedIds + item.id
+                                }
+                            },
+                        shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
+                            containerColor = if (selectionMode && isSelected) {
+                                MaterialTheme.colorScheme.primaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.surface
+                            },
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                     ) {
@@ -194,6 +296,24 @@ fun MyAdhkarScreen(
                                 .padding(start = 16.dp, end = 8.dp, top = 14.dp, bottom = 14.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
+                            if (selectionMode) {
+                                Icon(
+                                    imageVector = if (isSelected) {
+                                        Icons.Filled.CheckCircle
+                                    } else {
+                                        Icons.Outlined.CheckBoxOutlineBlank
+                                    },
+                                    contentDescription = if (isSelected) "محدد" else "غير محدد",
+                                    tint = if (isSelected) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
+                                    modifier = Modifier
+                                        .size(28.dp)
+                                        .padding(end = 12.dp),
+                                )
+                            }
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     text = item.content,
@@ -211,17 +331,19 @@ fun MyAdhkarScreen(
                                     textAlign = TextAlign.Center,
                                 )
                             }
-                            IconButton(
-                                onClick = {
-                                    onDelete(item)
-                                    scope.launch { snackbarHostState.showSnackbar("تم حذف الذكر.") }
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Delete,
-                                    contentDescription = "حذف الذكر",
-                                    tint = MaterialTheme.colorScheme.error,
-                                )
+                            if (!selectionMode) {
+                                IconButton(
+                                    onClick = {
+                                        onDelete(item)
+                                        scope.launch { snackbarHostState.showSnackbar("تم حذف الذكر.") }
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Delete,
+                                        contentDescription = "حذف الذكر",
+                                        tint = MaterialTheme.colorScheme.error,
+                                    )
+                                }
                             }
                         }
                     }

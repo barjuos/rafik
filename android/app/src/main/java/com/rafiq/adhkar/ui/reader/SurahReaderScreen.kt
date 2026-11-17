@@ -150,8 +150,10 @@ fun SurahReaderScreen(
 
     fun restartReading() {
         onSaveReadingPosition(0)
+        selectedBookmark = -1
+        onSaveBookmark(-1)
         scope.launch { listState.animateScrollToItem(0) }
-        Toast.makeText(context, "تم الرجوع إلى أول السورة", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "تمت العودة ومسح العلامات", Toast.LENGTH_SHORT).show()
     }
 
     Scaffold(

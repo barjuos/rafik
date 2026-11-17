@@ -9,16 +9,14 @@
 2. قم بتفعيل خيار "التثبيت من مصادر غير معروفة" (Install from Unknown Sources) في إعدادات الأمان بجهازك.
 3. افتح ملف الـ APK واتبع التعليمات لإتمام عملية التثبيت.
 
-**🆕 ما الجديد في الإصدار 1.1.2:**
-- 🔄 **المتابعة من حيث توقفت**: يُحفظ موضعك تلقائياً في السور والأذكار، وعند الفتح التالي تعود مباشرة إلى آخر موضع وصلت إليه.
-- ⏮ **زر «العودة إلى أول السورة»** في نهاية كل سورة (البقرة والكهف) للبدء من جديد بكبسة واحدة.
-- ↻ **زر «إعادة البدء»** أعلى شاشة الأذكار لإعادة القائمة من أولها في أي وقت.
-- 🎯 **توسيط كامل**: تم توسيط نصوص الأذكار المفضلة (أذكاري) وعناصر شاشة الأذكار (العنوان، التقدّم، النص، الوصف، المصدر).
-- 🔠 **التحكم بحجم الخط** في السور: 7 مستويات من 20 إلى 46، ويُحفظ اختيارك.
-- ✍️ **إصلاح رسم الحروف**: كلمات مثل «إبراهيم» و«النبيين» أصبحت تظهر بياء كاملة.
+**🆕 ما الجديد في الإصدار 1.1.3:**
+- 🌗 **ثيم بضغطة واحدة**: تم حذف قائمة الثيم — الهلال يفتح المظهر المظلم والشمس تضيء المظهر المضيء (بدون خيار «النظام»).
+- ✓ **أذكاري بالاختيار**: زر «اختيار» أعلى أذكاري للتحديد المتعدد — «بدء القراءة (n)» يقرأ المختارة فقط، مع «تحديد الكل» و «مسح الكل»، وموضعك محفوظ تلقائياً لكل قائمة.
+- ⏮ **«العودة إلى أول السورة» تمحو العلامات أيضاً**: الضغط عليه في نهاية السورة يرجعك لأولها ويمسح أي آية معلّمة مع موضع القراءة (reset كامل).
 
 <details>
-<summary>ما الجديد في الإصدارات السابقة (1.1.1 و 1.1.0)</summary>
+<summary>ما الجديد في الإصدارات السابقة (1.1.2 و 1.1.1 و 1.1.0)</summary>
+- **1.1.2**: المتابعة من حيث توقفت في السور والأذكار + زر «العودة إلى أول السورة» + توسيط كامل.
 
 - **1.1.1**: إصلاح رسم الحروف (الياء/الواو الصغيرة) + التحكم بحجم خط السور.
 - **1.1.0**: قارئ سورة البقرة والكهف، ترقيم الآيات، والعلامة الذكية 🔖.
@@ -48,6 +46,8 @@ Rafiq is a dual-platform application designed to help Muslims perform their dail
 - ✅ **117 Authentic Adhkar & Surahs** - Sourced from Sahih Bukhari, Muslim, Tirmidhi, and Abu Dawud
 - ✅ **Qur'an Reader** - Full Surah Al-Baqarah (286 verses) & Al-Kahf (110 verses)
 - ✅ **Smart Reading Bookmark** - Tap a verse to highlight it, press 🔖 to jump back to it
+- 🌗 **Single-Tap Theme Toggle** - One icon (moon/sun) switches Light/Dark instantly
+- ✅ **My Adhkar Picker** - Select which of your adhkar to read; tracker starts with your chosen set
 - ✅ **Continue Where You Stopped** - Auto-saves your place in surahs and adhkar lists
 - ✅ **Reader Restart Button** - Jump back to the first verse at the end of any surah
 - ✅ **Adjustable Text Size** - 7 reading sizes, remembered per device
@@ -110,7 +110,7 @@ A beautiful native Android application built with Jetpack Compose.
 
 ### Download
 
-🔥 **Download Latest APK:** [Rafiq v1.1.2](https://github.com/barjuos/rafik/releases/latest)
+🔥 **Download Latest APK:** [Rafiq v1.1.3](https://github.com/barjuos/rafik/releases/latest)
 
 Or visit our **[GitHub Releases](https://github.com/barjuos/rafik/releases)** for all versions.
 

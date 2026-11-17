@@ -92,8 +92,16 @@ fun RafiqNavHost(
         }
 
         composable("my-adhkar") {
+            val progress by remember {
+                viewModel.getTrackerProgress("my-adhkar")
+            }.collectAsState(initial = null)
             MyAdhkarScreen(
                 custom = custom,
+                savedProgress = progress,
+                onSaveProgress = { index, count ->
+                    viewModel.saveTrackerProgress("my-adhkar", index, count)
+                },
+                onResetProgress = { viewModel.clearTrackerProgress("my-adhkar") },
                 theme = theme,
                 onThemeChange = viewModel::setTheme,
                 onAdd = viewModel::addCustom,
