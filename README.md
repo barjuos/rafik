@@ -9,14 +9,21 @@
 2. قم بتفعيل خيار "التثبيت من مصادر غير معروفة" (Install from Unknown Sources) في إعدادات الأمان بجهازك.
 3. افتح ملف الـ APK واتبع التعليمات لإتمام عملية التثبيت.
 
-**🆕 ما الجديد في الإصدار 1.1.1:**
-- ✍️ **إصلاح رسم الحروف**: كلمات مثل «إبراهيم» و«النبيين» كانت تظهر بحرف ياء ناقص بسبب علامات الرسم العثماني الخاصة؛ تم استبدال النص بنص قرآني قياسي كامل التشكيل.
-- 🔠 **التحكم بحجم الخط**: زر جديد في أعلى شاشة القراءة (أ diagonally) لاختيار حجم الخط من 7 مستويات، ويُحفظ اختيارك تلقائياً.
-- 📖 **قارئ سورة البقرة (286 آية) وسورة الكهف (110 آية)** داخل التطبيق، بصفحة قراءة مريحة قابلة للتمرير.
-- 🔖 **علامة قراءة ذكية**: اضغط على أي آية فتُلوَّن بالأصفر، ثم اضغط زر العلامة (🔖) للعودة إليها في أي وقت.
-- 🕮 عند إعادة فتح السورة ينتقل التطبيق تلقائياً إلى آخر آية علّمتها، والضغط على الآية المعلّمة مرة أخرى يزيل العلامة.
-- 🕌 بطاقتان جديدتان للسورتين في الشاشة الرئيسية، مع ترقيم آيات سورة البقرة.
-- ✨ توسيط نصوص الأذكار في شاشة القراءة.
+**🆕 ما الجديد في الإصدار 1.1.2:**
+- 🔄 **المتابعة من حيث توقفت**: يُحفظ موضعك تلقائياً في السور والأذكار، وعند الفتح التالي تعود مباشرة إلى آخر موضع وصلت إليه.
+- ⏮ **زر «العودة إلى أول السورة»** في نهاية كل سورة (البقرة والكهف) للبدء من جديد بكبسة واحدة.
+- ↻ **زر «إعادة البدء»** أعلى شاشة الأذكار لإعادة القائمة من أولها في أي وقت.
+- 🎯 **توسيط كامل**: تم توسيط نصوص الأذكار المفضلة (أذكاري) وعناصر شاشة الأذكار (العنوان، التقدّم، النص، الوصف، المصدر).
+- 🔠 **التحكم بحجم الخط** في السور: 7 مستويات من 20 إلى 46، ويُحفظ اختيارك.
+- ✍️ **إصلاح رسم الحروف**: كلمات مثل «إبراهيم» و«النبيين» أصبحت تظهر بياء كاملة.
+
+<details>
+<summary>ما الجديد في الإصدارات السابقة (1.1.1 و 1.1.0)</summary>
+
+- **1.1.1**: إصلاح رسم الحروف (الياء/الواو الصغيرة) + التحكم بحجم خط السور.
+- **1.1.0**: قارئ سورة البقرة والكهف، ترقيم الآيات، والعلامة الذكية 🔖.
+
+</details>
 
 <div align="center">
   <img src="public/icon-512x512.png" alt="Rafiq Logo" width="180"/>
@@ -41,6 +48,9 @@ Rafiq is a dual-platform application designed to help Muslims perform their dail
 - ✅ **117 Authentic Adhkar & Surahs** - Sourced from Sahih Bukhari, Muslim, Tirmidhi, and Abu Dawud
 - ✅ **Qur'an Reader** - Full Surah Al-Baqarah (286 verses) & Al-Kahf (110 verses)
 - ✅ **Smart Reading Bookmark** - Tap a verse to highlight it, press 🔖 to jump back to it
+- ✅ **Continue Where You Stopped** - Auto-saves your place in surahs and adhkar lists
+- ✅ **Reader Restart Button** - Jump back to the first verse at the end of any surah
+- ✅ **Adjustable Text Size** - 7 reading sizes, remembered per device
 - ✅ **Daily Tracker** - Intuitive touch-based counting system
 - ✅ **Custom Adhkar** - Add your personal reminders
 - ✅ **Theme Support** - Light, Dark, and System themes
@@ -100,7 +110,7 @@ A beautiful native Android application built with Jetpack Compose.
 
 ### Download
 
-🔥 **Download Latest APK:** [Rafiq v1.1.1](https://github.com/barjuos/rafik/releases/latest)
+🔥 **Download Latest APK:** [Rafiq v1.1.2](https://github.com/barjuos/rafik/releases/latest)
 
 Or visit our **[GitHub Releases](https://github.com/barjuos/rafik/releases)** for all versions.
 
@@ -110,8 +120,15 @@ Or visit our **[GitHub Releases](https://github.com/barjuos/rafik/releases)** fo
 2. السورة تُفتح كصفحة قراءة كاملة قابلة للتمرير (مع ترقيم الآيات).
 3. **اضغط على أي آية** لتضع عليها علامة صفراء — تُحفظ تلقائياً.
 4. **اضغط زر 🔖** في الأعلى للعودة إلى الآية المعلّمة.
-5. في المرة القادمة، تُفتح السورة تلقائياً على آخر آية علّمتها.
+5. في المرة القادمة، تُفتح السورة تلقائياً على آخر موضع قرأت فيه.
 6. للضغط على الآية المعلّمة مرة أخرى → تُزال العلامة.
+
+### 🔄 Continue where you stopped
+
+- **السور:** يُحفظ موضع القراءة تلقائياً كلما توقفت عن التمرير، وعند إعادة فتح السورة تنتقل إلى آخر آية وصلت إليها.
+- **الأذكار:** يُحفظ موضعك داخل القائمة (رقم الذكر والتكرار)، فتعود وتكمل من نفس المكان.
+- في نهاية كل سورة يظهر **زر «العودة إلى أول السورة»** للبدء من جديد.
+- في شاشة الأذكار يوجد زر **إعادة البدء** (↻) لإعادة القائمة من أولها.
 
 ### 🔠 Adjusting the text size
 

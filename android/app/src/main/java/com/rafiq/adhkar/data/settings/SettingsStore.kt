@@ -25,6 +25,8 @@ class SettingsStore(private val context: Context) {
         }
     }
 
+    // ---------------------------------------------------------------- bookmarks
+
     fun getBookmark(surahId: String): Flow<Int> = context.rafiqDataStore.data.map { preferences ->
         preferences[intPreferencesKey("bookmark_$surahId")] ?: -1
     }
@@ -35,6 +37,20 @@ class SettingsStore(private val context: Context) {
         }
     }
 
+    // ------------------------------------------------- automatic reading position
+
+    fun getReadingPosition(surahId: String): Flow<Int> = context.rafiqDataStore.data.map { preferences ->
+        preferences[intPreferencesKey("reading_$surahId")] ?: -1
+    }
+
+    suspend fun saveReadingPosition(surahId: String, verseIndex: Int) {
+        context.rafiqDataStore.edit { preferences ->
+            preferences[intPreferencesKey("reading_$surahId")] = verseIndex
+        }
+    }
+
+    // ------------------------------------------------------------- reader font size
+
     private val readerFontSizeKey = intPreferencesKey("reader_font_size")
 
     val readerFontSize: Flow<Int> = context.rafiqDataStore.data.map { preferences ->
@@ -44,6 +60,29 @@ class SettingsStore(private val context: Context) {
     suspend fun setReaderFontSize(value: Int) {
         context.rafiqDataStore.edit { preferences ->
             preferences[readerFontSizeKey] = value
+        }
+    }
+
+    // ----------------------------------------------------------- tracker progress
+
+    fun getTrackerProgress(key: String): Flow<TrackerProgress> = context.rafiqDataStore.data.map { p ->
+        TrackerProgress(
+            index = p[intPreferencesKey("tracker_index_$key")] ?: 0,
+            count = p[intPreferencesKey("tracker_count_$key")] ?: 0,
+        )
+    }
+
+    suspend fun saveTrackerProgress(key: String, index: Int, count: Int) {
+        context.rafiqDataStore.edit { preferences ->
+            preferences[intPreferencesKey("tracker_index_$key")] = index
+            preferences[intPreferencesKey("tracker_count_$key")] = count
+        }
+    }
+
+    suspend fun clearTrackerProgress(key: String) {
+        context.rafiqDataStore.edit { preferences ->
+            preferences.remove(intPreferencesKey("tracker_index_$key"))
+            preferences.remove(intPreferencesKey("tracker_count_$key"))
         }
     }
 }

@@ -49,12 +49,20 @@ fun RafiqNavHost(
         composable("category/{category}") { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("category") ?: return@composable
             val category = RafiqCategories.firstOrNull { it.id == categoryId }
+            val progress by remember(categoryId) {
+                viewModel.getTrackerProgress(categoryId)
+            }.collectAsState(initial = null)
             TrackerScreen(
                 title = category?.detailTitle ?: "",
                 adhkar = adhkar[categoryId].orEmpty(),
                 theme = theme,
                 onThemeChange = viewModel::setTheme,
                 onBack = { navController.popBackStack() },
+                savedProgress = progress,
+                onSaveProgress = { index, count ->
+                    viewModel.saveTrackerProgress(categoryId, index, count)
+                },
+                onResetProgress = { viewModel.clearTrackerProgress(categoryId) },
             )
         }
 
@@ -65,14 +73,19 @@ fun RafiqNavHost(
             val bookmark by remember(categoryId) {
                 viewModel.getBookmark(categoryId)
             }.collectAsState(initial = null)
+            val readingPosition by remember(categoryId) {
+                viewModel.getReadingPosition(categoryId)
+            }.collectAsState(initial = null)
             SurahReaderScreen(
                 title = category?.detailTitle ?: "",
                 content = surahContent,
                 theme = theme,
                 initialBookmark = bookmark,
+                initialReadingPosition = readingPosition,
                 fontSize = fontSize,
                 onThemeChange = viewModel::setTheme,
                 onSaveBookmark = { viewModel.saveBookmark(categoryId, it) },
+                onSaveReadingPosition = { viewModel.saveReadingPosition(categoryId, it) },
                 onFontSizeChange = viewModel::setReaderFontSize,
                 onBack = { navController.popBackStack() },
             )

@@ -197,14 +197,18 @@ fun MyAdhkarScreen(
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     text = item.content,
+                                    modifier = Modifier.fillMaxWidth(),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface,
+                                    textAlign = TextAlign.Center,
                                 )
                                 Spacer(Modifier.height(4.dp))
                                 Text(
                                     text = "التكرار: ${item.count}",
+                                    modifier = Modifier.fillMaxWidth(),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center,
                                 )
                             }
                             IconButton(

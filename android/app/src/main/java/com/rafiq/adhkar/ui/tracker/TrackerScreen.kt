@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rafiq.adhkar.data.model.Dhikr
+import com.rafiq.adhkar.data.settings.TrackerProgress
 import com.rafiq.adhkar.ui.components.CountRing
 import com.rafiq.adhkar.ui.components.ThemeMenu
 import com.rafiq.adhkar.util.Haptics
@@ -69,11 +72,16 @@ fun TrackerScreen(
     theme: String,
     onThemeChange: (String) -> Unit,
     onBack: () -> Unit,
+    /** Previously saved position, or null while it is still loading. */
+    savedProgress: TrackerProgress? = null,
+    onSaveProgress: (Int, Int) -> Unit = { _, _ -> },
+    onResetProgress: () -> Unit = {},
 ) {
     var state by rememberSaveable(title, stateSaver = TrackerStateSaver) {
         mutableStateOf(TrackerState(index = 0))
     }
     var advancing by remember { mutableStateOf(false) }
+    var restoredProgress by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val soundPlayer = remember { SoundPlayer(context) }
@@ -82,6 +90,25 @@ fun TrackerScreen(
 
     DisposableEffect(Unit) {
         onDispose { soundPlayer.release() }
+    }
+
+    // Restore the saved position once it arrives from storage.
+    LaunchedEffect(savedProgress) {
+        if (!restoredProgress && savedProgress != null && adhkar.isNotEmpty()) {
+            restoredProgress = true
+            val index = savedProgress.index.coerceIn(0, adhkar.lastIndex)
+            val count = savedProgress.count.coerceAtLeast(0)
+            if (index > 0 || count > 0) {
+                state = TrackerState(index = index, count = count)
+            }
+        }
+    }
+
+    // Persist the position so the user can continue where they stopped.
+    LaunchedEffect(state, restoredProgress) {
+        if (restoredProgress) {
+            if (state.finished) onResetProgress() else onSaveProgress(state.index, state.count)
+        }
     }
 
     val currentDhikr = adhkar.getOrNull(state.index)
@@ -119,8 +146,10 @@ fun TrackerScreen(
                 title = {
                     Text(
                         text = title,
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
                     )
                 },
                 navigationIcon = {
@@ -132,7 +161,19 @@ fun TrackerScreen(
                         )
                     }
                 },
-                actions = { ThemeMenu(theme, onThemeChange) },
+                actions = {
+                    IconButton(onClick = {
+                        state = TrackerState(index = 0)
+                        onResetProgress()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.RestartAlt,
+                            contentDescription = "إعادة البدء من الأول",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                    ThemeMenu(theme, onThemeChange)
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
@@ -188,8 +229,10 @@ private fun ProgressHeader(
     Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
         Text(
             text = "$title - $current من $total",
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(8.dp))
         LinearProgressIndicator(
@@ -223,7 +266,9 @@ private fun TrackerCard(
             Spacer(Modifier.height(20.dp))
             Text(
                 text = dhikr.content,
-                modifier = Modifier.padding(horizontal = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontSize = 26.sp,
                     lineHeight = 46.sp,
@@ -244,6 +289,7 @@ private fun TrackerCard(
                     if (dhikr.description.isNotBlank()) {
                         Text(
                             text = dhikr.description,
+                            modifier = Modifier.fillMaxWidth(),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
@@ -253,9 +299,11 @@ private fun TrackerCard(
                         Spacer(Modifier.height(6.dp))
                         Text(
                             text = dhikr.reference,
+                            modifier = Modifier.fillMaxWidth(),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }
@@ -290,6 +338,7 @@ private fun CompletionContent(title: String) {
         Spacer(Modifier.height(8.dp))
         Text(
             text = "لقد أتممت $title.",
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

@@ -59,6 +59,22 @@ class MainViewModel(
         viewModelScope.launch { settingsStore.saveBookmark(surahId, verseIndex) }
     }
 
+    fun getReadingPosition(surahId: String) = settingsStore.getReadingPosition(surahId)
+
+    fun saveReadingPosition(surahId: String, verseIndex: Int) {
+        viewModelScope.launch { settingsStore.saveReadingPosition(surahId, verseIndex) }
+    }
+
+    fun getTrackerProgress(key: String) = settingsStore.getTrackerProgress(key)
+
+    fun saveTrackerProgress(key: String, index: Int, count: Int) {
+        viewModelScope.launch { settingsStore.saveTrackerProgress(key, index, count) }
+    }
+
+    fun clearTrackerProgress(key: String) {
+        viewModelScope.launch { settingsStore.clearTrackerProgress(key) }
+    }
+
     fun setReaderFontSize(value: Int) {
         viewModelScope.launch { settingsStore.setReaderFontSize(value) }
     }
